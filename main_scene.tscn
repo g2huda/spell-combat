@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://cw2lraq8ia3uk"]
+
+[ext_resource type="Script" uid="uid://cauld73ri5deh" path="res://Player.cs" id="1_0f027"]
+[ext_resource type="Script" uid="uid://gg61shfcjggg" path="res://CameraRig.cs" id="2_2c62f"]
+[ext_resource type="Script" uid="uid://bw3wgy6ylx8rs" path="res://InputHandler.cs" id="3_gyfs4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0f027"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_o3jxj"]
+material = SubResource("StandardMaterial3D_0f027")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_0f027"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0f027"]
+
+[sub_resource type="Environment" id="Environment_0f027"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_2c62f"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gyfs4"]
+albedo_color = Color(1.4369954, 1.4369954, 1.4369954, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0f027"]
+material = SubResource("StandardMaterial3D_gyfs4")
+size = Vector2(20, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0f027"]
+margin = 0.0
+size = Vector3(20, 0.1, 20)
+
+[sub_resource type="Sky" id="Sky_0f027"]
+
+[sub_resource type="Environment" id="Environment_2c62f"]
+sky = SubResource("Sky_0f027")
+
+[node name="MainScene" type="Node3D" unique_id=1032505371]
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=780758776 node_paths=PackedStringArray("InputHandler")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0059847, 0)
+script = ExtResource("1_0f027")
+InputHandler = NodePath("../InputHandler")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=1768126592]
+mesh = SubResource("CapsuleMesh_o3jxj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player/MeshInstance3D" unique_id=1723829432]
+transform = Transform3D(0.79, 0, 0, 0, -1.5298985e-08, -0.65, 0, 0.35, -2.8412401e-08, 0, 0.3870859, -0.24906921)
+mesh = SubResource("CylinderMesh_0f027")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=2023858064]
+shape = SubResource("SphereShape3D_0f027")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=311518755 node_paths=PackedStringArray("Target")]
+script = ExtResource("2_2c62f")
+Target = NodePath("../Player")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=733570465]
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 11.005984, 10)
+environment = SubResource("Environment_0f027")
+attributes = SubResource("CameraAttributesPractical_2c62f")
+current = true
+
+[node name="Arena" type="StaticBody3D" parent="." unique_id=240818528]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena" unique_id=283582042]
+mesh = SubResource("PlaneMesh_0f027")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena" unique_id=2053134643]
+shape = SubResource("BoxShape3D_0f027")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1058406771]
+environment = SubResource("Environment_2c62f")
+
+[node name="InputHandler" type="Node" parent="." unique_id=1515480921]
+script = ExtResource("3_gyfs4")

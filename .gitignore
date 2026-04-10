@@ -1,0 +1,26 @@
+# Godot 4+ specific
+.godot/
+.nomedia
+
+# Godot general ignores
+.import/
+export.cfg
+export_credentials.cfg
+*.tmp
+*.translation
+
+# C# / .NET specific
+.mono/
+bin/
+obj/
+*.sln
+*.csproj
+mono_crash.*.json
+
+# IDE specific (Optional but recommended)
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userprefs
