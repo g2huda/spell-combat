@@ -1,6 +1,4 @@
 using Godot;
-using System;
-using System.Diagnostics;
 
 public partial class Player : CharacterBody3D
 {
@@ -15,12 +13,19 @@ public partial class Player : CharacterBody3D
 
 	public  override void _Ready()
 	{
-		InputHandler.Connect(InputHandler.Move, Callable.From<float>(OnMoveInput));
-		InputHandler.Connect(InputHandler.Turn, Callable.From<float>(OnTurnInput));
+		InputHandler.MoveInput += OnMoveInput;
+		InputHandler.TurnInput += OnTurnInput;
+
 		base._Ready();
 	}
 
-	
+	public override void _ExitTree()
+	{
+		InputHandler.MoveInput -= OnMoveInput;
+		InputHandler.TurnInput -= OnTurnInput;
+		base._ExitTree();
+	}
+
 	public override void _PhysicsProcess(double delta)
 	{
 		float deltaF = (float)delta;
@@ -35,13 +40,6 @@ public partial class Player : CharacterBody3D
 		MoveAndSlide();
 	}
 
-	public void OnMoveInput(float value)
-	{
-		Debug.Print($"Move input: {value}");
-		_moveInput = value;
-	}
-	private void OnTurnInput(float value)
-	{
-		_turnInput = value;
-	}
+	public void OnMoveInput(float value) => _moveInput = value;
+	private void OnTurnInput(float value) => _turnInput = value;
 }
