@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://cw2lraq8ia3uk"]
 
-[ext_resource type="Script" uid="uid://cauld73ri5deh" path="res://Player.cs" id="1_0f027"]
+[ext_resource type="Script" uid="uid://cauld73ri5deh" path="res://Scripts/Player.cs" id="1_0f027"]
 [ext_resource type="Script" uid="uid://gg61shfcjggg" path="res://Scripts/CameraRig.cs" id="2_2c62f"]
-[ext_resource type="Script" uid="uid://bw3wgy6ylx8rs" path="res://Scripts/InputHandler.cs" id="3_gyfs4"]
+[ext_resource type="Script" uid="uid://bw3wgy6ylx8rs" path="res://Scripts/Systems/InputHandler.cs" id="3_gyfs4"]
+[ext_resource type="Script" uid="uid://bsutqcl43tt8s" path="res://Scripts/Systems/AbilitySystem.cs" id="4_d5x1h"]
+[ext_resource type="PackedScene" uid="uid://d2fcf4m2xp02" path="res://PackedScenes/fireball_spell.tscn" id="5_8mm7a"]
+[ext_resource type="PackedScene" uid="uid://d1tmu4ok7t4de" path="res://PackedScenes/cone_spell.tscn" id="6_nfk4m"]
+[ext_resource type="PackedScene" uid="uid://4aycrnq3jvlh" path="res://PackedScenes/health_spell.tscn" id="7_66tet"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0f027"]
 vertex_color_use_as_albedo = true
@@ -40,7 +44,7 @@ sky = SubResource("Sky_0f027")
 [node name="Player" type="CharacterBody3D" parent="." unique_id=780758776 node_paths=PackedStringArray("InputHandler")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0059847, 0)
 script = ExtResource("1_0f027")
-InputHandler = NodePath("../InputHandler")
+InputHandler = NodePath("../Systems/InputHandler")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=1768126592]
 mesh = SubResource("CapsuleMesh_o3jxj")
@@ -51,6 +55,9 @@ mesh = SubResource("CylinderMesh_0f027")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=2023858064]
 shape = SubResource("SphereShape3D_0f027")
+
+[node name="AbilitiesRoot" type="Node3D" parent="Player" unique_id=295669786]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34749198, -0.82633305)
 
 [node name="CameraRig" type="Node3D" parent="." unique_id=311518755 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_2c62f")
@@ -74,5 +81,14 @@ shape = SubResource("BoxShape3D_0f027")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1058406771]
 environment = SubResource("Environment_2c62f")
 
-[node name="InputHandler" type="Node" parent="." unique_id=1515480921]
+[node name="Systems" type="Node" parent="." unique_id=2099160367]
+
+[node name="InputHandler" type="Node" parent="Systems" unique_id=1515480921]
 script = ExtResource("3_gyfs4")
+
+[node name="AbilitySystem" type="Node" parent="Systems" unique_id=175965613 node_paths=PackedStringArray("InputHandler", "Player", "AbilitiesLocalPosition")]
+script = ExtResource("4_d5x1h")
+InputHandler = NodePath("../InputHandler")
+Player = NodePath("../../Player")
+AbilitiesLocalPosition = NodePath("../../Player/AbilitiesRoot")
+Abilities = Array[PackedScene]([ExtResource("5_8mm7a"), ExtResource("6_nfk4m"), ExtResource("7_66tet")])

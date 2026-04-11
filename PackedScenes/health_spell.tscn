@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://4aycrnq3jvlh"]
+
+[ext_resource type="Script" uid="uid://c3chmok2h7ry7" path="res://Scripts/Spells/HealthSpell.cs" id="1_5slma"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_d5x1h"]
+radius = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d5x1h"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_8mm7a"]
+material = SubResource("StandardMaterial3D_d5x1h")
+radius = 0.25
+height = 0.5
+
+[node name="HealthSpell" type="Area3D" unique_id=893504181]
+script = ExtResource("1_5slma")
+Speed = 18.0
+Damage = -15.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=637461994]
+shape = SubResource("SphereShape3D_d5x1h")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=892868689]
+mesh = SubResource("SphereMesh_8mm7a")

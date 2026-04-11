@@ -5,13 +5,15 @@ public partial class InputHandler : Node
 
 	[Signal] public delegate void MoveInputEventHandler(float value);
 	[Signal] public delegate void TurnInputEventHandler(float value);
-	[Signal] public delegate void AbilityInputEventHandler();
+	[Signal] public delegate void AbilityRequestedEventHandler();
+	[Signal] public delegate void SwitchAbilityEventHandler();
 
 	[Export] protected StringName MoveForwardActionName = "move_forward";
 	[Export] protected StringName MoveBackwardActionName = "move_backward";
 	[Export] protected StringName TurnRightActionName = "turn_right";
 	[Export] protected StringName TurnLeftActionName = "turn_left";
 	[Export] protected StringName AbilityActionName = "ability";
+	[Export] protected StringName SwitchAbilityActionName = "switch_ability";
 
 	public override void _Input(InputEvent @event)
 	{
@@ -29,9 +31,14 @@ public partial class InputHandler : Node
 
 		if(@event.IsAction(AbilityActionName) && @event.IsPressed())
 		{
-			EmitSignal(SignalName.AbilityInput);
-        }
-    }
+			EmitSignal(SignalName.AbilityRequested);
+		}
+
+		if(@event.IsAction(SwitchAbilityActionName) && @event.IsPressed())
+		{
+			EmitSignal(SignalName.SwitchAbility);
+		}
+	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

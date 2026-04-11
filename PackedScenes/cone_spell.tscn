@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://d1tmu4ok7t4de"]
+
+[ext_resource type="Script" uid="uid://dan6b64x7xub8" path="res://Scripts/Spells/ConeSpell.cs" id="1_h0633"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_d5x1h"]
+radius = 0.685
+
+[sub_resource type="PrismMesh" id="PrismMesh_h0633"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[node name="ConeSpell" type="Area3D" unique_id=893504181]
+script = ExtResource("1_h0633")
+Speed = 8.0
+TravelDistance = 30.0
+Damage = 25.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=637461994]
+shape = SubResource("SphereShape3D_d5x1h")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=892868689]
+transform = Transform3D(1.9106853e-15, -4.3711385e-08, -1, -0.99999994, -4.3711385e-08, 0, -4.3711385e-08, 0.99999994, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("PrismMesh_h0633")
