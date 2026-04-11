@@ -26,7 +26,12 @@ public partial class InputHandler : Node
 			float turn = @event.GetActionStrength(TurnRightActionName) - @event.GetActionStrength(TurnLeftActionName);
 			EmitSignal(SignalName.TurnInput, turn);
 		}
-	}
+
+		if(@event.IsAction(AbilityActionName) && @event.IsPressed())
+		{
+			EmitSignal(SignalName.AbilityInput);
+        }
+    }
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

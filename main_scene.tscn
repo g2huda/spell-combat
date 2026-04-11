@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cw2lraq8ia3uk"]
 
 [ext_resource type="Script" uid="uid://cauld73ri5deh" path="res://Player.cs" id="1_0f027"]
-[ext_resource type="Script" uid="uid://gg61shfcjggg" path="res://CameraRig.cs" id="2_2c62f"]
-[ext_resource type="Script" uid="uid://bw3wgy6ylx8rs" path="res://InputHandler.cs" id="3_gyfs4"]
+[ext_resource type="Script" uid="uid://gg61shfcjggg" path="res://Scripts/CameraRig.cs" id="2_2c62f"]
+[ext_resource type="Script" uid="uid://bw3wgy6ylx8rs" path="res://Scripts/InputHandler.cs" id="3_gyfs4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0f027"]
 vertex_color_use_as_albedo = true
