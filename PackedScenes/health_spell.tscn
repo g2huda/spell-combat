@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://4aycrnq3jvlh"]
 
 [ext_resource type="Script" uid="uid://c3chmok2h7ry7" path="res://Scripts/Spells/HealthSpell.cs" id="1_5slma"]
+[ext_resource type="PackedScene" uid="uid://b5dc0n2p7byoc" path="res://PackedScenes/Effects/health_hit_sfx.tscn" id="2_gs4eo"]
+[ext_resource type="PackedScene" uid="uid://dcb8e0dhv8sqt" path="res://PackedScenes/Effects/health_hit_vfx.tscn" id="3_8fwsr"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_d5x1h"]
 radius = 0.31556547
@@ -18,6 +20,8 @@ script = ExtResource("1_5slma")
 Speed = 18.0
 Damage = -15.0
 CollisionShape = NodePath("CollisionShape3D")
+HitSfxScene = ExtResource("2_gs4eo")
+HitVfxScene = ExtResource("3_8fwsr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=637461994]
 shape = SubResource("SphereShape3D_d5x1h")

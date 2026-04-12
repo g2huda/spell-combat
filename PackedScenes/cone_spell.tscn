@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://d1tmu4ok7t4de"]
 
 [ext_resource type="Script" uid="uid://dan6b64x7xub8" path="res://Scripts/Spells/ConeSpell.cs" id="1_h0633"]
+[ext_resource type="PackedScene" uid="uid://dxf06q8jc6jg5" path="res://PackedScenes/Effects/cone_hit_sfx.tscn" id="2_kl30a"]
+[ext_resource type="PackedScene" uid="uid://0ecct6rf234l" path="res://PackedScenes/Effects/cone_hit_vfx.tscn" id="3_13jxr"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_d5x1h"]
 radius = 0.45081377
@@ -14,6 +16,8 @@ Speed = 8.0
 TravelDistance = 30.0
 Damage = 25.0
 CollisionShape = NodePath("CollisionShape3D")
+HitSfxScene = ExtResource("2_kl30a")
+HitVfxScene = ExtResource("3_13jxr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=637461994]
 shape = SubResource("SphereShape3D_d5x1h")

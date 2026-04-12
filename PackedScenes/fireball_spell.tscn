@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://d2fcf4m2xp02"]
 
 [ext_resource type="Script" uid="uid://detywhfvhma8o" path="res://Scripts/Spells/FireballSpell.cs" id="1_2y812"]
+[ext_resource type="PackedScene" uid="uid://boa5302xdtaa6" path="res://PackedScenes/Effects/fireball_hit_sfx.tscn" id="2_utgjs"]
+[ext_resource type="PackedScene" uid="uid://dkl6j425t7abx" path="res://PackedScenes/Effects/fireball_hit_vfx.tscn" id="3_dfrxt"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_d5x1h"]
 radius = 0.32
@@ -16,6 +18,8 @@ height = 0.5
 [node name="FireballSpell" type="Area3D" unique_id=893504181 node_paths=PackedStringArray("CollisionShape")]
 script = ExtResource("1_2y812")
 CollisionShape = NodePath("CollisionShape3D")
+HitSfxScene = ExtResource("2_utgjs")
+HitVfxScene = ExtResource("3_dfrxt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=637461994]
 shape = SubResource("SphereShape3D_d5x1h")

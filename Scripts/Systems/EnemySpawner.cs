@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class EnemySpawner : Node
 {
@@ -37,7 +36,7 @@ public partial class EnemySpawner : Node
 			AddChild(enemy);
 			
 			AbilitySystem.OnAbilityHit += enemy.TryReceiveAbility;
-			enemy.OnAbilityReceived += AbilitySystem.OnAbilityUsed;
+			enemy.OnAbilityReceived += AbilitySystem.OnAbilityUsedHandler;
 
 			Vector3 spawnPos = GetRandomPointAround(CenterPoint.GlobalPosition, SpawnRadius);
 			enemy.GlobalPosition = Vector3.One * 1000; // Temporarily move enemy far away to avoid early collisions

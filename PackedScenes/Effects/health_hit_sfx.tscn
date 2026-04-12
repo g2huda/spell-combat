@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://b5dc0n2p7byoc"]
+
+[ext_resource type="Script" uid="uid://cq2mrt475lal" path="res://Scripts/Effects/EnemyHitSfx.cs" id="1_qi73f"]
+[ext_resource type="AudioStream" uid="uid://b8d5tcw5kceb8" path="res://PackedScenes/Effects/HealSpell.mp3" id="1_ttmnh"]
+
+[node name="EnemyHitSfx" type="Node3D" unique_id=1729557934 node_paths=PackedStringArray("_audioPlayer")]
+script = ExtResource("1_qi73f")
+_audioPlayer = NodePath("AudioStreamPlayer3D")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1333446680]
+stream = ExtResource("1_ttmnh")

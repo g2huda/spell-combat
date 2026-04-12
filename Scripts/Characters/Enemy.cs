@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class Enemy : CharacterBody3D
 {
@@ -14,7 +13,7 @@ public partial class Enemy : CharacterBody3D
 		Recover
 	}
 
-	[Signal] public delegate void OnAbilityReceivedEventHandler(BaseAbility ability);
+	[Signal] public delegate void OnAbilityReceivedEventHandler(AbilityHitData hitData);
 
 	[Export] public float MoveSpeed = 3.0f;
 	[Export] public float PatrolRadius = 5.0f;
@@ -142,13 +141,13 @@ public partial class Enemy : CharacterBody3D
 		}
 	}
 
-	internal void TryReceiveAbility(Node3D target, float power, BaseAbility ability)
+	internal void TryReceiveAbility(AbilityHitData hitData)
 	{
-		if (target == this)
+		if (hitData.Target == this)
 		{
-			EmitSignal(SignalName.OnAbilityReceived, ability);
+			EmitSignal(SignalName.OnAbilityReceived, hitData);
 			// Apply damage or other effects here
-			_currentHealth -= (int)power;
+			_currentHealth -= (int)hitData.Power;
 			_currentHealth = Mathf.Max(_currentHealth, 0);
 			float healthPercent = (float)_currentHealth / _maxHealth;
 			HealthBar.SetHealthPercent(healthPercent);

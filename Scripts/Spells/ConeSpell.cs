@@ -39,5 +39,11 @@ public partial class ConeSpell : BaseAbility
 		_moveTween.Finished += OnTravelFinished;
 	}
 
+	protected override void OnAbilityStoppedHandler()
+	{
+		base.OnAbilityStoppedHandler();
+		_moveTween?.Kill();
+	}
+
 	private void OnTravelFinished() => EnableAbility(false);
 }

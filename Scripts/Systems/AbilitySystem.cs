@@ -4,7 +4,8 @@ using System;
 
 public partial class AbilitySystem : Node
 {
-	[Signal] public delegate void OnAbilityHitEventHandler(Node3D target, float power, BaseAbility ability);
+	[Signal] public delegate void OnAbilityHitEventHandler(AbilityHitData hitData);
+	[Signal] public delegate void OnAbilityUsedEventHandler(AbilityHitData hitData);
 
 	[Export] protected InputHandler InputHandler;
 	[Export] protected Node3D Player;
@@ -104,15 +105,16 @@ public partial class AbilitySystem : Node
 			_abilitiesPool[_abilityNames[_currentAbilityIndex]][_currentAbilityInstanceIndex];
 	}
 
-	private void OnAbilityHitHandler(Node3D target, float power, BaseAbility ability)
+	private void OnAbilityHitHandler(AbilityHitData hitData)
 	{
-		if(target == Player || target is BaseAbility) return;
+		if(hitData.Target == Player || hitData.Target is BaseAbility) return;
 
-		EmitSignal(SignalName.OnAbilityHit, target, power, ability);
+		EmitSignal(SignalName.OnAbilityHit, hitData);
 	}
 
-	internal void OnAbilityUsed(BaseAbility ability)
+	internal void OnAbilityUsedHandler(AbilityHitData hitData)
 	{
-		ability.EnableAbility(false);
+		hitData.SourceAbility.EnableAbility(false);
+		EmitSignal(SignalName.OnAbilityUsed, hitData);
 	}
 }

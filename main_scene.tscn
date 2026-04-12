@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://4aycrnq3jvlh" path="res://PackedScenes/health_spell.tscn" id="7_66tet"]
 [ext_resource type="Script" uid="uid://hhyjnotisv4v" path="res://Scripts/Systems/EnemySpawner.cs" id="8_66tet"]
 [ext_resource type="PackedScene" uid="uid://bajq304xwc710" path="res://PackedScenes/enemy.tscn" id="9_7ycvg"]
+[ext_resource type="Script" uid="uid://dtu0dppec2udp" path="res://Scripts/Systems/AbilityFeedbackSystem.cs" id="10_wr18j"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0f027"]
 vertex_color_use_as_albedo = true
@@ -105,6 +106,10 @@ SpawnCount = 6
 SpawnRadius = 15.0
 CenterPoint = NodePath("../../EnemyOffset")
 Player = NodePath("../../Player")
+
+[node name="AbilityFeedbackSystem" type="Node" parent="Systems" unique_id=1433398545 node_paths=PackedStringArray("AbilitySystem")]
+script = ExtResource("10_wr18j")
+AbilitySystem = NodePath("../AbilitySystem")
 
 [node name="EnemyOffset" type="Node3D" parent="." unique_id=877326906]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
