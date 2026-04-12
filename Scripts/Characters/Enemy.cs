@@ -14,6 +14,7 @@ public partial class Enemy : CharacterBody3D
 	}
 
 	[Signal] public delegate void OnAbilityReceivedEventHandler(AbilityHitData hitData);
+	[Signal] public delegate void OnDeathEventHandler(Enemy enemy);
 
 	[Export] public float MoveSpeed = 3.0f;
 	[Export] public float PatrolRadius = 5.0f;
@@ -148,9 +149,14 @@ public partial class Enemy : CharacterBody3D
 			EmitSignal(SignalName.OnAbilityReceived, hitData);
 			// Apply damage or other effects here
 			_currentHealth -= (int)hitData.Power;
-			_currentHealth = Mathf.Max(_currentHealth, 0);
+			_currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
 			float healthPercent = (float)_currentHealth / _maxHealth;
 			HealthBar.SetHealthPercent(healthPercent);
+			if(_currentHealth <= 0)
+			{
+				EmitSignal(SignalName.OnDeath, this);
+				QueueFree();
+			}
 		}
 	}
 }
