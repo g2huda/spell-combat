@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c3chmok2h7ry7" path="res://Scripts/Spells/HealthSpell.cs" id="1_5slma"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_d5x1h"]
-radius = 0.25
+radius = 0.31556547
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d5x1h"]
 albedo_color = Color(0, 1, 0, 1)
@@ -13,10 +13,11 @@ material = SubResource("StandardMaterial3D_d5x1h")
 radius = 0.25
 height = 0.5
 
-[node name="HealthSpell" type="Area3D" unique_id=893504181]
+[node name="HealthSpell" type="Area3D" unique_id=893504181 node_paths=PackedStringArray("CollisionShape")]
 script = ExtResource("1_5slma")
 Speed = 18.0
 Damage = -15.0
+CollisionShape = NodePath("CollisionShape3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=637461994]
 shape = SubResource("SphereShape3D_d5x1h")

@@ -1,0 +1,157 @@
+using Godot;
+using System;
+
+public partial class Enemy : CharacterBody3D
+{
+	private enum EnemyState
+	{
+		Idle,
+		Patrol,
+		Investigate,
+		Chase,
+		Reposition,
+		Attack,
+		Recover
+	}
+
+	[Signal] public delegate void OnAbilityReceivedEventHandler(BaseAbility ability);
+
+	[Export] public float MoveSpeed = 3.0f;
+	[Export] public float PatrolRadius = 5.0f;
+	[Export] public float WaitAtPointTime = 1.5f;
+	[Export] public float InvestigateTime = 2.0f;
+	[Export] public float RotationSpeed = 6.0f;
+	[Export] protected HealthBarUI HealthBar;
+
+	private EnemyState _state = EnemyState.Idle;
+
+	private Vector3 _spawnPosition;
+	private Vector3 _targetPoint;
+
+
+	private RandomNumberGenerator _rng = new();
+	private float _stateTimer;
+
+	private int _maxHealth = 100;
+	private int _currentHealth;
+
+	public void Init(Vector3 spawnPos)
+	{
+		_spawnPosition = spawnPos;
+		GlobalPosition = _spawnPosition;
+		_currentHealth = _maxHealth;
+		_rng.Randomize();
+		ChooseNextPatrolPoint();
+		ChangeState(EnemyState.Patrol);
+	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		_stateTimer -= (float)delta;
+		ProcessState((float)delta);
+		MoveAndSlide();
+	}
+	private void ProcessState(float dt)
+	{
+		switch(_state)
+		{
+			case EnemyState.Idle:
+				Velocity = new Vector3(0, Velocity.Y, 0);
+				if(_stateTimer <= 0.0f)
+				{
+					ChooseNextPatrolPoint();
+					ChangeState(EnemyState.Patrol);
+				}
+				break;
+
+			case EnemyState.Patrol:
+				MoveTowards(_targetPoint, MoveSpeed, dt);
+
+				if(IsCloseTo(_targetPoint, 0.5f))
+				{
+					ChangeState(EnemyState.Idle);
+					_stateTimer = WaitAtPointTime + _rng.RandfRange(0.0f, 1.0f);
+				}
+				break;
+		}
+	}
+
+	private void MoveTowards(Vector3 target, float speed, float dt)
+	{
+		Vector3 direction = target - GlobalPosition;
+		direction.Y = 0.0f;
+
+		if(direction.LengthSquared() > 0.001f)
+		{
+			direction = direction.Normalized();
+			Velocity = new Vector3(direction.X * speed, Velocity.Y, direction.Z * speed);
+			FaceTowards(target, dt);
+		}
+		else
+		{
+			Velocity = new Vector3(0, Velocity.Y, 0);
+		}
+	}
+
+	private void FaceTowards(Vector3 target, float dt)
+	{
+		Vector3 lookDirection = GlobalPosition - target;
+		lookDirection.Y = 0.0f;
+
+		if(lookDirection.LengthSquared() < 0.001f)
+			return;
+
+		float targetYaw = Mathf.Atan2(lookDirection.X, lookDirection.Z);
+		Vector3 rotation = Rotation;
+		rotation.Y = Mathf.LerpAngle(rotation.Y, targetYaw, RotationSpeed * dt);
+		Rotation = rotation;
+	}
+
+	private bool IsCloseTo(Vector3 target, float tolerance)
+	{
+		Vector3 a = GlobalPosition;
+		Vector3 b = target;
+		a.Y = 0;
+		b.Y = 0;
+		return a.DistanceTo(b) <= tolerance;
+	}
+
+	private void ChooseNextPatrolPoint()
+	{
+		float angle = _rng.RandfRange(0.0f, Mathf.Tau);
+		float radius = _rng.RandfRange(1.5f, PatrolRadius);
+
+		Vector3 offset = new Vector3(
+			Mathf.Cos(angle) * radius,
+			0,
+			Mathf.Sin(angle) * radius
+		);
+
+		_targetPoint = _spawnPosition + offset;
+	}
+
+	private void ChangeState(EnemyState newState)
+	{
+		_state = newState;
+
+		switch(_state)
+		{
+			case EnemyState.Idle:
+				_stateTimer = WaitAtPointTime + _rng.RandfRange(0.2f, 1.0f);
+				break;
+		}
+	}
+
+	internal void TryReceiveAbility(Node3D target, float power, BaseAbility ability)
+	{
+		if (target == this)
+		{
+			EmitSignal(SignalName.OnAbilityReceived, ability);
+			// Apply damage or other effects here
+			_currentHealth -= (int)power;
+			_currentHealth = Mathf.Max(_currentHealth, 0);
+			float healthPercent = (float)_currentHealth / _maxHealth;
+			HealthBar.SetHealthPercent(healthPercent);
+		}
+	}
+}

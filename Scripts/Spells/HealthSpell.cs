@@ -24,9 +24,9 @@ public partial class HealthSpell : BaseAbility
 		base._Process(delta);
 	}
 
-	public override void ActivateAbility(Node3D ownerActor, Vector3 direction, Vector3 atLocation)
+	public override void FireAbility(Node3D ownerActor, Vector3 direction, Vector3 atLocation)
 	{
-		base.ActivateAbility(ownerActor, direction, atLocation);
+		base.FireAbility(ownerActor, direction, atLocation);
 		LookAt(ownerActor.GlobalPosition + direction.Normalized(), Vector3.Up);
 
 		float travelTime = TravelDistance / Mathf.Max(Speed, 0.01f);
@@ -36,6 +36,7 @@ public partial class HealthSpell : BaseAbility
 		_moveTween = CreateTween();
 		_moveTween.TweenProperty(this, "global_position", targetPosition, travelTime);
 
-		_moveTween.Finished += DeactivateAbility;
+		_moveTween.Finished += OnTravelFinished;
 	}
+	private void OnTravelFinished() => EnableAbility(false);
 }

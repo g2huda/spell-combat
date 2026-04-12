@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://bajq304xwc710"]
+
+[ext_resource type="Script" uid="uid://m4ergm8riepp" path="res://Scripts/Characters/Enemy.cs" id="1_fm44b"]
+[ext_resource type="Script" uid="uid://cihmk3mflkkcw" path="res://Scripts/UI/HealthBarUI.cs" id="2_hm0yg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0f027"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.14901961, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_o3jxj"]
+material = SubResource("StandardMaterial3D_0f027")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_0f027"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hm0yg"]
+radius = 0.65
+height = 2.38
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_hm0yg"]
+viewport_path = NodePath("HealthBarViewport")
+
+[node name="Enemy" type="CharacterBody3D" unique_id=906428092 node_paths=PackedStringArray("HealthBar")]
+script = ExtResource("1_fm44b")
+PatrolRadius = 8.0
+HealthBar = NodePath("HealthBarViewport/HealthBarUI")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2127556534]
+mesh = SubResource("CapsuleMesh_o3jxj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D" unique_id=871523700]
+transform = Transform3D(0.79, 0, 0, 0, -1.5298985e-08, -0.65, 0, 0.35, -2.8412401e-08, 0, 0.3870859, -0.24906921)
+mesh = SubResource("CylinderMesh_0f027")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1978182908]
+shape = SubResource("CapsuleShape3D_hm0yg")
+
+[node name="AbilitiesRoot" type="Node3D" parent="." unique_id=1814720030]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34749198, -0.82633305)
+
+[node name="HealthBarAnchor" type="Node3D" parent="." unique_id=1974900294]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.494, 0)
+
+[node name="Sprite3D" type="Sprite3D" parent="HealthBarAnchor" unique_id=1434630138]
+billboard = 1
+texture = SubResource("ViewportTexture_hm0yg")
+
+[node name="HealthBarViewport" type="SubViewport" parent="." unique_id=515768324]
+transparent_bg = true
+size = Vector2i(100, 12)
+render_target_update_mode = 4
+
+[node name="HealthBarUI" type="Control" parent="HealthBarViewport" unique_id=626851779 node_paths=PackedStringArray("Fill")]
+custom_minimum_size = Vector2(100, 12)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_hm0yg")
+Fill = NodePath("Fill")
+
+[node name="Background" type="ColorRect" parent="HealthBarViewport/HealthBarUI" unique_id=2078646671]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0, 0, 1)
+
+[node name="Fill" type="ColorRect" parent="HealthBarViewport/HealthBarUI" unique_id=390702340]
+layout_mode = 1
+offset_right = 100.0
+offset_bottom = 12.0
+color = Color(0, 1, 0, 1)

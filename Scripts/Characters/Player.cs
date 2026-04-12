@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class Player : CharacterBody3D
 {
@@ -43,9 +42,4 @@ public partial class Player : CharacterBody3D
 
 	public void OnMoveInput(float value) => _moveInput = value;
 	private void OnTurnInput(float value) => _turnInput = value;
-
-    internal BaseAbility GetEquippedAbility()
-    {
-        throw new NotImplementedException();
-    }
 }

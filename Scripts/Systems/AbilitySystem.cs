@@ -1,9 +1,10 @@
 using Godot;
 using Godot.Collections;
+using System;
 
 public partial class AbilitySystem : Node
 {
-	[Signal] public delegate void OnAbilityHitEventHandler(Node3D target, float power);
+	[Signal] public delegate void OnAbilityHitEventHandler(Node3D target, float power, BaseAbility ability);
 
 	[Export] protected InputHandler InputHandler;
 	[Export] protected Node3D Player;
@@ -57,13 +58,13 @@ public partial class AbilitySystem : Node
 	{
 		T abilityInstance = abilityScene.Instantiate<T>();
 		AddChild(abilityInstance);
-		abilityInstance.Hide();
+		abilityInstance.EnableAbility(false);
 		return abilityInstance;
 	}
 
 	private void OnAbilityRequested()
 	{
-		_equippedAbility.ActivateAbility(Player, -Player.Transform.Basis.Z,
+		_equippedAbility.FireAbility(Player, -Player.Transform.Basis.Z,
 			AbilitiesLocalPosition.GlobalPosition);
 		_currentAbilityInstanceIndex =
 			(_currentAbilityInstanceIndex + 1)
@@ -74,7 +75,7 @@ public partial class AbilitySystem : Node
 
 	private void OnSwitchAbilityRequested()
 	{
-		_equippedAbility.Hide();
+		_equippedAbility.EnableAbility(false);
 		_currentAbilityIndex = (_currentAbilityIndex + 1) % _abilityNames.Count;
 		StringName newAbilityName = _abilityNames[_currentAbilityIndex];
 		_currentAbilityInstanceIndex = 0;
@@ -94,8 +95,8 @@ public partial class AbilitySystem : Node
 			for(int i = 0; i < AbilityRange - 1; i++)
 			{
 				BaseAbility additionalInstance = InstantiateAbility<BaseAbility>(ability);
+				additionalInstance.OnAbilityHit += OnAbilityHitHandler;
 				_abilitiesPool[abilityName].Add(additionalInstance);
-				additionalInstance.Hide();
 			}
 		}
 
@@ -103,10 +104,15 @@ public partial class AbilitySystem : Node
 			_abilitiesPool[_abilityNames[_currentAbilityIndex]][_currentAbilityInstanceIndex];
 	}
 
-	private void OnAbilityHitHandler(Node3D target, float power)
+	private void OnAbilityHitHandler(Node3D target, float power, BaseAbility ability)
 	{
 		if(target == Player || target is BaseAbility) return;
 
-		EmitSignal(SignalName.OnAbilityHit, target, power);
+		EmitSignal(SignalName.OnAbilityHit, target, power, ability);
+	}
+
+	internal void OnAbilityUsed(BaseAbility ability)
+	{
+		ability.EnableAbility(false);
 	}
 }
