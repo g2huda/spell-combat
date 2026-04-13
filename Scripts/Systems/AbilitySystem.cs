@@ -1,11 +1,11 @@
 using Godot;
 using Godot.Collections;
-using System;
 
 public partial class AbilitySystem : Node
 {
 	[Signal] public delegate void OnAbilityHitEventHandler(AbilityHitData hitData);
 	[Signal] public delegate void OnAbilityUsedEventHandler(AbilityHitData hitData);
+	[Signal] public delegate void OnAbilitySwitchedEventHandler(StringName newAbilityName);
 
 	[Export] protected InputHandler InputHandler;
 	[Export] protected Node3D Player;
@@ -81,6 +81,7 @@ public partial class AbilitySystem : Node
 		StringName newAbilityName = _abilityNames[_currentAbilityIndex];
 		_currentAbilityInstanceIndex = 0;
 		_equippedAbility = _abilitiesPool[newAbilityName][_currentAbilityInstanceIndex];
+		EmitSignal(SignalName.OnAbilitySwitched, newAbilityName);
 	}
 
 	private void InitializeAbilities()

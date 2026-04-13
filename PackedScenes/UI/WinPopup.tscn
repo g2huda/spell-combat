@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://cvuv8d5n7gt7f"]
+
+[ext_resource type="Script" uid="uid://do2fw2d0hw0kd" path="res://Scripts/UI/WinPopup.cs" id="1_q3t6t"]
+
+[node name="WinPopup" type="Control" unique_id=1701296940]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_q3t6t")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=23707089]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="CenterContainer" unique_id=1979507721]
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/Panel" unique_id=1530374109]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "All enemies defeated! You win!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3

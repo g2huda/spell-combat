@@ -2,7 +2,7 @@ using Godot;
 
 public partial class EnemySpawner : Node
 {
-	[Signal] public delegate void OnAllEnemiesDefeatedEventHandler();
+	[Signal] public delegate void OnEnemiesCountChangedEventHandler(int remainingEnemies);
 
 	[Export] protected PackedScene EnemyScene;
 	[Export] protected AbilitySystem AbilitySystem;
@@ -13,6 +13,15 @@ public partial class EnemySpawner : Node
 
 	private RandomNumberGenerator _rng = new();
 	private int _remainingSpawns;
+	private int RemainingSpawns
+	{
+		get => _remainingSpawns;
+		set
+		{
+			_remainingSpawns = value;
+			EmitSignal(SignalName.OnEnemiesCountChanged, _remainingSpawns);
+		}
+	}
 
 	public override void _Ready()
 	{
@@ -46,19 +55,13 @@ public partial class EnemySpawner : Node
 			enemy.MoveSpeed += _rng.RandfRange(-0.3f, 0.5f);
 		}
 
-		_remainingSpawns = SpawnCount;
+		RemainingSpawns = SpawnCount;
 	}
 
 	private void OnDeathHandler(Enemy enemy)
 	{
-		_remainingSpawns--;
+		RemainingSpawns--;
 		CleanupEnemySignals(enemy);
-		if(_remainingSpawns <= 0)
-		{
-			GD.Print("All enemies defeated! You win!");
-			// Can transition to a victory screen or restarting the level.
-			EmitSignal(SignalName.OnAllEnemiesDefeated);
-		}
 	}
 
 	private void SetupEnemySignals(Enemy enemy)

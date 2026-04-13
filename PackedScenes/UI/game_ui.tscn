@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://djigi7kw885ci"]
+
+[ext_resource type="Script" uid="uid://bf85ycf17whte" path="res://Scripts/UI/GameUi.cs" id="1_hstr7"]
+
+[node name="GameUI" type="Control" unique_id=251978334]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hstr7")
+
+[node name="SpellEquiped" type="CenterContainer" parent="." unique_id=1252704435]
+layout_mode = 1
+offset_right = 225.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="SpellEquiped" unique_id=536745336]
+custom_minimum_size = Vector2(225, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SpellEquiped/Panel" unique_id=1792495330]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "FireBall spell equipped"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Enemies Remaining" type="CenterContainer" parent="." unique_id=199765051]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -175.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="Panel" type="Panel" parent="Enemies Remaining" unique_id=1385334054]
+custom_minimum_size = Vector2(190, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Enemies Remaining/Panel" unique_id=812383342]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "6 enemies remaining"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
