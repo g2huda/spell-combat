@@ -4,9 +4,15 @@ public partial class Player : CharacterBody3D
 {
 	public const float JumpVelocity = 4.5f;
 
+	//trigger event when player is ready to cast a spell, used to sync animation and ability execution
+	[Signal] public delegate void OnSpellReadyEventHandler(Vector3 abilityPoint);
+	[Signal] public delegate void SwitchAbilityReadyEventHandler();
+
 	[Export] protected InputHandler InputHandler;
+	[Export] protected PlayerAnimationController AnimationController;
 	[Export] protected float MoveSpeed = 6f;
 	[Export] protected float RotationSpeed = 2.5f;
+	[Export] protected Marker3D AbilityPoint;
 
 	private float _moveInput;
 	private float _turnInput;
@@ -15,7 +21,10 @@ public partial class Player : CharacterBody3D
 	{
 		InputHandler.MoveInput += OnMoveInput;
 		InputHandler.TurnInput += OnTurnInput;
-
+		InputHandler.MoveInput += AnimationController.SetMoveSpeed;
+		InputHandler.AbilityRequested += AnimationController.TriggerAttack;
+		InputHandler.SwitchAbility += OnSwitchAbilityHandler;//todo: can add animation for switching ability later
+		AnimationController.OnSpellReady += OnSpellReadyHandler;
 		base._Ready();
 	}
 
@@ -23,6 +32,10 @@ public partial class Player : CharacterBody3D
 	{
 		InputHandler.MoveInput -= OnMoveInput;
 		InputHandler.TurnInput -= OnTurnInput;
+		InputHandler.MoveInput -= AnimationController.SetMoveSpeed;
+		InputHandler.AbilityRequested -= AnimationController.TriggerAttack;
+		InputHandler.SwitchAbility -= OnSwitchAbilityHandler;
+		AnimationController.OnSpellReady -= OnSpellReadyHandler;
 		base._ExitTree();
 	}
 
@@ -42,4 +55,7 @@ public partial class Player : CharacterBody3D
 
 	public void OnMoveInput(float value) => _moveInput = value;
 	private void OnTurnInput(float value) => _turnInput = value;
+	private void OnSpellReadyHandler() => EmitSignal(SignalName.OnSpellReady, AbilityPoint.GlobalPosition);
+	private void OnSwitchAbilityHandler() => EmitSignal(SignalName.SwitchAbilityReady);
+
 }

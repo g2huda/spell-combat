@@ -7,9 +7,7 @@ public partial class AbilitySystem : Node
 	[Signal] public delegate void OnAbilityUsedEventHandler(AbilityHitData hitData);
 	[Signal] public delegate void OnAbilitySwitchedEventHandler(StringName newAbilityName);
 
-	[Export] protected InputHandler InputHandler;
-	[Export] protected Node3D Player;
-	[Export] protected Node3D AbilitiesLocalPosition;
+	[Export] protected Player Player;
 	[Export] protected Array<PackedScene> Abilities { get; set; }
 	[Export] protected float AbilityRange = 6f;
 
@@ -31,15 +29,15 @@ public partial class AbilitySystem : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		InputHandler.AbilityRequested += OnAbilityRequested;
-		InputHandler.SwitchAbility += OnSwitchAbilityRequested;
+		Player.OnSpellReady += OnAbilityRequested;
+		Player.SwitchAbilityReady += OnSwitchAbilityRequested;
 		base._Ready();
 	}
 
 	public override void _ExitTree()
 	{
-		InputHandler.AbilityRequested -= OnAbilityRequested;
-		InputHandler.SwitchAbility -= OnSwitchAbilityRequested;
+		Player.OnSpellReady -= OnAbilityRequested;
+		Player.SwitchAbilityReady -= OnSwitchAbilityRequested;
 		foreach(Array<BaseAbility> abilityList in _abilitiesPool.Values)
 		{
 			foreach(BaseAbility ability in abilityList)
@@ -63,10 +61,10 @@ public partial class AbilitySystem : Node
 		return abilityInstance;
 	}
 
-	private void OnAbilityRequested()
+	private void OnAbilityRequested(Vector3 abilityPoint)
 	{
 		_equippedAbility.FireAbility(Player, -Player.Transform.Basis.Z,
-			AbilitiesLocalPosition.GlobalPosition);
+			abilityPoint);
 		_currentAbilityInstanceIndex =
 			(_currentAbilityInstanceIndex + 1)
 			% _abilitiesPool[_abilityNames[_currentAbilityIndex]].Count;

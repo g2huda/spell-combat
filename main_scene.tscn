@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cw2lraq8ia3uk"]
 
-[ext_resource type="Script" uid="uid://cauld73ri5deh" path="res://Scripts/Characters/Player.cs" id="1_0f027"]
+[ext_resource type="PackedScene" uid="uid://djskce6q1f227" path="res://PackedScenes/Characters/Player/player.tscn" id="1_mo76n"]
 [ext_resource type="Script" uid="uid://gg61shfcjggg" path="res://Scripts/CameraRig.cs" id="2_2c62f"]
 [ext_resource type="Script" uid="uid://bw3wgy6ylx8rs" path="res://Scripts/Systems/InputHandler.cs" id="3_gyfs4"]
 [ext_resource type="Script" uid="uid://bsutqcl43tt8s" path="res://Scripts/Systems/AbilitySystem.cs" id="4_d5x1h"]
@@ -8,23 +8,11 @@
 [ext_resource type="PackedScene" uid="uid://d1tmu4ok7t4de" path="res://PackedScenes/Spells/cone_spell.tscn" id="6_nfk4m"]
 [ext_resource type="PackedScene" uid="uid://4aycrnq3jvlh" path="res://PackedScenes/Spells/health_spell.tscn" id="7_66tet"]
 [ext_resource type="Script" uid="uid://hhyjnotisv4v" path="res://Scripts/Systems/EnemySpawner.cs" id="8_66tet"]
-[ext_resource type="PackedScene" uid="uid://bajq304xwc710" path="res://PackedScenes/enemy.tscn" id="9_7ycvg"]
+[ext_resource type="PackedScene" uid="uid://bajq304xwc710" path="res://PackedScenes/Characters/enemy.tscn" id="9_7ycvg"]
 [ext_resource type="Script" uid="uid://dtu0dppec2udp" path="res://Scripts/Systems/AbilityFeedbackSystem.cs" id="10_wr18j"]
 [ext_resource type="Script" uid="uid://cmqrwsmdrdphc" path="res://Scripts/Systems/GameController.cs" id="11_qwutr"]
 [ext_resource type="PackedScene" uid="uid://cvuv8d5n7gt7f" path="res://PackedScenes/UI/WinPopup.tscn" id="12_671wp"]
 [ext_resource type="Script" uid="uid://bf85ycf17whte" path="res://Scripts/UI/GameUi.cs" id="13_mo76n"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0f027"]
-vertex_color_use_as_albedo = true
-albedo_color = Color(0, 1, 0, 1)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_o3jxj"]
-material = SubResource("StandardMaterial3D_0f027")
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_0f027"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7ycvg"]
-radius = 0.65
 
 [sub_resource type="Environment" id="Environment_0f027"]
 
@@ -55,24 +43,8 @@ size = Vector2(20, 20)
 
 [node name="MainScene" type="Node3D" unique_id=1032505371]
 
-[node name="Player" type="CharacterBody3D" parent="." unique_id=780758776 node_paths=PackedStringArray("InputHandler")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-axis_lock_linear_y = true
-script = ExtResource("1_0f027")
+[node name="Player" parent="." unique_id=663688316 node_paths=PackedStringArray("InputHandler") instance=ExtResource("1_mo76n")]
 InputHandler = NodePath("../Systems/InputHandler")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=1768126592]
-mesh = SubResource("CapsuleMesh_o3jxj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player/MeshInstance3D" unique_id=1723829432]
-transform = Transform3D(0.79, 0, 0, 0, -1.5298985e-08, -0.65, 0, 0.35, -2.8412401e-08, 0, 0.3870859, -0.24906921)
-mesh = SubResource("CylinderMesh_0f027")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=2023858064]
-shape = SubResource("CapsuleShape3D_7ycvg")
-
-[node name="AbilitiesRoot" type="Node3D" parent="Player" unique_id=295669786]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34749198, -0.82633305)
 
 [node name="CameraRig" type="Node3D" parent="." unique_id=311518755 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_2c62f")
@@ -92,21 +64,18 @@ environment = SubResource("Environment_2c62f")
 [node name="InputHandler" type="Node" parent="Systems" unique_id=1515480921]
 script = ExtResource("3_gyfs4")
 
-[node name="AbilitySystem" type="Node" parent="Systems" unique_id=175965613 node_paths=PackedStringArray("InputHandler", "Player", "AbilitiesLocalPosition")]
+[node name="AbilitySystem" type="Node" parent="Systems" unique_id=175965613 node_paths=PackedStringArray("Player")]
 script = ExtResource("4_d5x1h")
-InputHandler = NodePath("../InputHandler")
 Player = NodePath("../../Player")
-AbilitiesLocalPosition = NodePath("../../Player/AbilitiesRoot")
 Abilities = Array[PackedScene]([ExtResource("5_8mm7a"), ExtResource("6_nfk4m"), ExtResource("7_66tet")])
 
-[node name="EnemySpawner" type="Node" parent="Systems" unique_id=1470002397 node_paths=PackedStringArray("AbilitySystem", "CenterPoint", "Player")]
+[node name="EnemySpawner" type="Node" parent="Systems" unique_id=1470002397 node_paths=PackedStringArray("AbilitySystem", "CenterPoint")]
 script = ExtResource("8_66tet")
 EnemyScene = ExtResource("9_7ycvg")
 AbilitySystem = NodePath("../AbilitySystem")
 SpawnCount = 6
 SpawnRadius = 15.0
 CenterPoint = NodePath("../../EnemyOffset")
-Player = NodePath("../../Player")
 
 [node name="AbilityFeedbackSystem" type="Node" parent="Systems" unique_id=1433398545 node_paths=PackedStringArray("AbilitySystem")]
 script = ExtResource("10_wr18j")
