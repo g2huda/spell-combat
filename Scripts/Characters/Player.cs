@@ -17,7 +17,7 @@ public partial class Player : CharacterBody3D
 	private float _moveInput;
 	private float _turnInput;
 
-	public  override void _Ready()
+    public  override void _Ready()
 	{
 		InputHandler.MoveInput += OnMoveInput;
 		InputHandler.TurnInput += OnTurnInput;
