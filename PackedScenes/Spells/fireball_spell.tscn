@@ -17,6 +17,7 @@ height = 0.5
 
 [node name="FireballSpell" type="Area3D" unique_id=893504181 node_paths=PackedStringArray("CollisionShape")]
 script = ExtResource("1_2y812")
+Damage = 25.0
 CollisionShape = NodePath("CollisionShape3D")
 HitSfxScene = ExtResource("2_utgjs")
 HitVfxScene = ExtResource("3_dfrxt")

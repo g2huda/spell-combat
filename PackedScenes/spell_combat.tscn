@@ -1,0 +1,190 @@
+[gd_scene format=3 uid="uid://bbvrqh5djtkdq"]
+
+[ext_resource type="PackedScene" uid="uid://djskce6q1f227" path="res://PackedScenes/Characters/Player/player.tscn" id="1_j660x"]
+[ext_resource type="Script" uid="uid://gg61shfcjggg" path="res://Scripts/CameraRig.cs" id="2_k8e0d"]
+[ext_resource type="Script" uid="uid://bsutqcl43tt8s" path="res://Scripts/Systems/AbilitySystem.cs" id="3_mac1p"]
+[ext_resource type="PackedScene" uid="uid://d2fcf4m2xp02" path="res://PackedScenes/Spells/fireball_spell.tscn" id="4_wixji"]
+[ext_resource type="PackedScene" uid="uid://d1tmu4ok7t4de" path="res://PackedScenes/Spells/cone_spell.tscn" id="5_veh8j"]
+[ext_resource type="PackedScene" uid="uid://4aycrnq3jvlh" path="res://PackedScenes/Spells/health_spell.tscn" id="6_gxqah"]
+[ext_resource type="Script" uid="uid://hhyjnotisv4v" path="res://Scripts/Systems/EnemySpawner.cs" id="7_8cr2y"]
+[ext_resource type="PackedScene" uid="uid://bajq304xwc710" path="res://PackedScenes/Characters/Enemy/enemy.tscn" id="8_w1w8i"]
+[ext_resource type="Script" uid="uid://dtu0dppec2udp" path="res://Scripts/Systems/AbilityFeedbackSystem.cs" id="9_4yh0u"]
+[ext_resource type="Script" uid="uid://cmqrwsmdrdphc" path="res://Scripts/Systems/GameController.cs" id="10_hb2he"]
+[ext_resource type="PackedScene" uid="uid://cvuv8d5n7gt7f" path="res://PackedScenes/UI/WinPopup.tscn" id="11_s413g"]
+[ext_resource type="Script" uid="uid://bf85ycf17whte" path="res://Scripts/UI/GameUi.cs" id="12_0oo30"]
+
+[sub_resource type="Environment" id="Environment_0f027"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_2c62f"]
+
+[sub_resource type="Sky" id="Sky_0f027"]
+
+[sub_resource type="Environment" id="Environment_2c62f"]
+sky = SubResource("Sky_0f027")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qwutr"]
+albedo_color = Color(0.45882353, 0.45882353, 1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_671wp"]
+material = SubResource("StandardMaterial3D_qwutr")
+size = Vector2(20, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0f027"]
+margin = 0.0
+size = Vector3(20, 0.1, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gyfs4"]
+albedo_color = Color(1.4369954, 1.4369954, 1.4369954, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0f027"]
+material = SubResource("StandardMaterial3D_gyfs4")
+size = Vector2(20, 20)
+
+[node name="SpellCombat" type="Node3D" unique_id=1377525747]
+
+[node name="Player" parent="." unique_id=663688316 instance=ExtResource("1_j660x")]
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=762550385 node_paths=PackedStringArray("Target")]
+script = ExtResource("2_k8e0d")
+Target = NodePath("../Player")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=2023904067]
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 3.3466406, 2.3406558)
+environment = SubResource("Environment_0f027")
+attributes = SubResource("CameraAttributesPractical_2c62f")
+current = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=77555127]
+environment = SubResource("Environment_2c62f")
+
+[node name="Systems" type="Node" parent="." unique_id=1301010164]
+
+[node name="AbilitySystem" type="Node" parent="Systems" unique_id=150863205 node_paths=PackedStringArray("Player")]
+script = ExtResource("3_mac1p")
+Player = NodePath("../../Player")
+Abilities = Array[PackedScene]([ExtResource("4_wixji"), ExtResource("5_veh8j"), ExtResource("6_gxqah")])
+
+[node name="EnemySpawner" type="Node" parent="Systems" unique_id=1759470068 node_paths=PackedStringArray("AbilitySystem", "CenterPoint", "Player")]
+script = ExtResource("7_8cr2y")
+EnemyScene = ExtResource("8_w1w8i")
+AbilitySystem = NodePath("../AbilitySystem")
+SpawnRadius = 15.0
+CenterPoint = NodePath("../../EnemyOffset")
+Player = NodePath("../../Player")
+
+[node name="AbilityFeedbackSystem" type="Node" parent="Systems" unique_id=1835301135 node_paths=PackedStringArray("AbilitySystem")]
+script = ExtResource("9_4yh0u")
+AbilitySystem = NodePath("../AbilitySystem")
+
+[node name="GameController" type="Node" parent="Systems" unique_id=1232434387 node_paths=PackedStringArray("GameUi", "EnemySpawner", "AbilitySystem")]
+script = ExtResource("10_hb2he")
+WinPopup = ExtResource("11_s413g")
+GameUi = NodePath("../../GameUI")
+EnemySpawner = NodePath("../EnemySpawner")
+AbilitySystem = NodePath("../AbilitySystem")
+
+[node name="EnemyOffset" type="Node3D" parent="." unique_id=1502711290]
+
+[node name="Arena" type="Node3D" parent="." unique_id=59603815]
+
+[node name="Arena" type="StaticBody3D" parent="Arena" unique_id=1115439546]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Arena" unique_id=306805590]
+mesh = SubResource("PlaneMesh_671wp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Arena" unique_id=49030248]
+shape = SubResource("BoxShape3D_0f027")
+
+[node name="Arena2" type="StaticBody3D" parent="Arena" unique_id=1487802668]
+transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, 0, 0, -50)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Arena2" unique_id=28262069]
+mesh = SubResource("PlaneMesh_0f027")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Arena2" unique_id=90728043]
+shape = SubResource("BoxShape3D_0f027")
+
+[node name="Arena3" type="StaticBody3D" parent="Arena" unique_id=1777066184]
+transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, 0, 1.3641145e-06, 50)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Arena3" unique_id=331238102]
+mesh = SubResource("PlaneMesh_0f027")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Arena3" unique_id=1949019037]
+shape = SubResource("BoxShape3D_0f027")
+
+[node name="Arena4" type="StaticBody3D" parent="Arena" unique_id=206005882]
+transform = Transform3D(-2.1855695e-07, 5, -2.1855695e-07, 0, -2.1855695e-07, -5, -5, -2.1855695e-07, 9.553427e-15, -50, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Arena4" unique_id=555256888]
+mesh = SubResource("PlaneMesh_0f027")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Arena4" unique_id=1023906434]
+shape = SubResource("BoxShape3D_0f027")
+
+[node name="Arena5" type="StaticBody3D" parent="Arena" unique_id=757391002]
+transform = Transform3D(-2.1855695e-07, 5, -2.1855695e-07, 0, -2.1855695e-07, -5, -5, -2.1855695e-07, 9.553427e-15, 50, 2.156255e-06, 2.156255e-06)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Arena5" unique_id=1395030128]
+mesh = SubResource("PlaneMesh_0f027")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Arena5" unique_id=1793196877]
+shape = SubResource("BoxShape3D_0f027")
+
+[node name="GameUI" type="Control" parent="." unique_id=457375416 node_paths=PackedStringArray("SpellEquippedLabel", "EnemiesRemainingLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("12_0oo30")
+SpellEquippedLabel = NodePath("SpellEquiped/Panel/SpellEquippedLabel")
+EnemiesRemainingLabel = NodePath("Enemies Remaining/Panel/EnemiesRemainingLabel")
+
+[node name="SpellEquiped" type="CenterContainer" parent="GameUI" unique_id=1497803996]
+layout_mode = 1
+offset_right = 225.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="GameUI/SpellEquiped" unique_id=1158502306]
+custom_minimum_size = Vector2(225, 40)
+layout_mode = 2
+
+[node name="SpellEquippedLabel" type="Label" parent="GameUI/SpellEquiped/Panel" unique_id=586354806]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "FireBall spell equipped"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Enemies Remaining" type="CenterContainer" parent="GameUI" unique_id=553461759]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -175.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="Panel" type="Panel" parent="GameUI/Enemies Remaining" unique_id=574211082]
+custom_minimum_size = Vector2(190, 40)
+layout_mode = 2
+
+[node name="EnemiesRemainingLabel" type="Label" parent="GameUI/Enemies Remaining/Panel" unique_id=1603215025]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "6 enemies remaining"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3

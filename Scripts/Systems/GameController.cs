@@ -2,11 +2,12 @@ using Godot;
 
 public partial class GameController : Node
 {
-
 	[Export] protected PackedScene WinPopup;
 	[Export] protected GameUi GameUi;
 	[Export] protected EnemySpawner EnemySpawner;
 	[Export] protected AbilitySystem AbilitySystem;
+
+	private WinPopup _winPopupInstance;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -17,6 +18,8 @@ public partial class GameController : Node
 	}
 	public override void _ExitTree()
 	{
+		if(_winPopupInstance != null)
+			_winPopupInstance.OnMainMenuButtonPressed -= OnMainMenuButtonPressedHandler;
 		EnemySpawner.OnEnemiesCountChanged -= OnEnemiesCountChangedHandler;
 		AbilitySystem.OnAbilitySwitched -= OnAbilitySwitchedHandler;
 
@@ -34,8 +37,14 @@ public partial class GameController : Node
 		if(remainingEnemies <= 0)
 		{
 			GD.Print("All enemies defeated! You win!");
-			Node winNode = WinPopup.Instantiate();
-			AddChild(winNode);
+			_winPopupInstance = WinPopup.Instantiate<WinPopup>();
+			_winPopupInstance.OnMainMenuButtonPressed += OnMainMenuButtonPressedHandler;
+			AddChild(_winPopupInstance);
 		}
+	}
+
+	private void OnMainMenuButtonPressedHandler()
+	{
+		LevelManager.Instance.LoadMainMenu();
 	}
 }

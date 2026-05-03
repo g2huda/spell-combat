@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://rlb3s63fwjvv"]
+
+[ext_resource type="Script" uid="uid://3s5wx1fj2xbr" path="res://Scripts/LevelManager.cs" id="1_gqvqm"]
+[ext_resource type="PackedScene" uid="uid://lq1hlunuaamh" path="res://PackedScenes/UI/MainMenu.tscn" id="2_huaee"]
+[ext_resource type="PackedScene" uid="uid://bbvrqh5djtkdq" path="res://PackedScenes/spell_combat.tscn" id="3_lp0sc"]
+
+[node name="LevelManager" type="Node" unique_id=1357627977]
+script = ExtResource("1_gqvqm")
+_mainMenuScene = ExtResource("2_huaee")
+_gameScene = ExtResource("3_lp0sc")
