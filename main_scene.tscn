@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://d1tmu4ok7t4de" path="res://PackedScenes/Spells/cone_spell.tscn" id="6_nfk4m"]
 [ext_resource type="PackedScene" uid="uid://4aycrnq3jvlh" path="res://PackedScenes/Spells/health_spell.tscn" id="7_66tet"]
 [ext_resource type="Script" uid="uid://hhyjnotisv4v" path="res://Scripts/Systems/EnemySpawner.cs" id="8_66tet"]
-[ext_resource type="PackedScene" uid="uid://bajq304xwc710" path="res://PackedScenes/Characters/enemy.tscn" id="9_7ycvg"]
+[ext_resource type="PackedScene" uid="uid://bajq304xwc710" path="res://PackedScenes/Characters/Enemy/enemy.tscn" id="9_7ycvg"]
 [ext_resource type="Script" uid="uid://dtu0dppec2udp" path="res://Scripts/Systems/AbilityFeedbackSystem.cs" id="10_wr18j"]
 [ext_resource type="Script" uid="uid://cmqrwsmdrdphc" path="res://Scripts/Systems/GameController.cs" id="11_qwutr"]
 [ext_resource type="PackedScene" uid="uid://cvuv8d5n7gt7f" path="res://PackedScenes/UI/WinPopup.tscn" id="12_671wp"]
@@ -43,13 +43,14 @@ size = Vector2(20, 20)
 [node name="MainScene" type="Node3D" unique_id=1032505371]
 
 [node name="Player" parent="." unique_id=663688316 instance=ExtResource("1_mo76n")]
+MoveSpeed = 3.0
 
 [node name="CameraRig" type="Node3D" parent="." unique_id=311518755 node_paths=PackedStringArray("Target")]
 script = ExtResource("2_2c62f")
 Target = NodePath("../Player")
 
 [node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=733570465]
-transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 5.8975534, 4.891569)
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 3.3466406, 2.3406558)
 environment = SubResource("Environment_0f027")
 attributes = SubResource("CameraAttributesPractical_2c62f")
 current = true
@@ -64,13 +65,14 @@ script = ExtResource("4_d5x1h")
 Player = NodePath("../../Player")
 Abilities = Array[PackedScene]([ExtResource("5_8mm7a"), ExtResource("6_nfk4m"), ExtResource("7_66tet")])
 
-[node name="EnemySpawner" type="Node" parent="Systems" unique_id=1470002397 node_paths=PackedStringArray("AbilitySystem", "CenterPoint")]
+[node name="EnemySpawner" type="Node" parent="Systems" unique_id=1470002397 node_paths=PackedStringArray("AbilitySystem", "CenterPoint", "Player")]
 script = ExtResource("8_66tet")
 EnemyScene = ExtResource("9_7ycvg")
 AbilitySystem = NodePath("../AbilitySystem")
 SpawnCount = 6
 SpawnRadius = 15.0
 CenterPoint = NodePath("../../EnemyOffset")
+Player = NodePath("../../Player")
 
 [node name="AbilityFeedbackSystem" type="Node" parent="Systems" unique_id=1433398545 node_paths=PackedStringArray("AbilitySystem")]
 script = ExtResource("10_wr18j")
@@ -84,7 +86,6 @@ EnemySpawner = NodePath("../EnemySpawner")
 AbilitySystem = NodePath("../AbilitySystem")
 
 [node name="EnemyOffset" type="Node3D" parent="." unique_id=877326906]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="Arena" type="Node3D" parent="." unique_id=227308876]
 

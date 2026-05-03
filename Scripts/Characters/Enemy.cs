@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 public partial class Enemy : CharacterBody3D
 {
@@ -16,18 +17,19 @@ public partial class Enemy : CharacterBody3D
 	[Signal] public delegate void OnAbilityReceivedEventHandler(AbilityHitData hitData);
 	[Signal] public delegate void OnDeathEventHandler(Enemy enemy);
 
-	[Export] public float MoveSpeed = 3.0f;
-	[Export] public float PatrolRadius = 5.0f;
-	[Export] public float WaitAtPointTime = 1.5f;
-	[Export] public float InvestigateTime = 2.0f;
-	[Export] public float RotationSpeed = 6.0f;
+	[Export] protected EnemyAnimationController AnimationController;
+	[Export] protected float MoveSpeed = 0.5f;
+	[Export] protected float PatrolRadius = 5.0f;
+	[Export] protected float WaitAtPointTime = 1.5f;
+	[Export] protected float InvestigateTime = 2.0f;
+	[Export] protected float RotationSpeed = 6.0f;
 	[Export] protected HealthBarUI HealthBar;
 
 	private EnemyState _state = EnemyState.Idle;
 
 	private Vector3 _spawnPosition;
 	private Vector3 _targetPoint;
-
+	private float _speed;
 
 	private RandomNumberGenerator _rng = new();
 	private float _stateTimer;
@@ -41,10 +43,18 @@ public partial class Enemy : CharacterBody3D
 		GlobalPosition = _spawnPosition;
 		_currentHealth = _maxHealth;
 		_rng.Randomize();
+
 		ChooseNextPatrolPoint();
 		ChangeState(EnemyState.Patrol);
+
+		AnimationController.OnDeathAnimationComplete += OnDeathCompleteHandler;
 	}
 
+	public override void _ExitTree()
+	{
+		AnimationController.OnDeathAnimationComplete -= OnDeathCompleteHandler;
+		base._ExitTree();
+	}
 	public override void _PhysicsProcess(double delta)
 	{
 		_stateTimer -= (float)delta;
@@ -65,7 +75,7 @@ public partial class Enemy : CharacterBody3D
 				break;
 
 			case EnemyState.Patrol:
-				MoveTowards(_targetPoint, MoveSpeed, dt);
+				MoveTowards(_targetPoint, dt);
 
 				if(IsCloseTo(_targetPoint, 0.5f))
 				{
@@ -76,7 +86,7 @@ public partial class Enemy : CharacterBody3D
 		}
 	}
 
-	private void MoveTowards(Vector3 target, float speed, float dt)
+	private void MoveTowards(Vector3 target, float dt)
 	{
 		Vector3 direction = target - GlobalPosition;
 		direction.Y = 0.0f;
@@ -84,7 +94,7 @@ public partial class Enemy : CharacterBody3D
 		if(direction.LengthSquared() > 0.001f)
 		{
 			direction = direction.Normalized();
-			Velocity = new Vector3(direction.X * speed, Velocity.Y, direction.Z * speed);
+			Velocity = new Vector3(direction.X * _speed, Velocity.Y, direction.Z * _speed);
 			FaceTowards(target, dt);
 		}
 		else
@@ -137,9 +147,15 @@ public partial class Enemy : CharacterBody3D
 		switch(_state)
 		{
 			case EnemyState.Idle:
+				_speed = 0.0f;
 				_stateTimer = WaitAtPointTime + _rng.RandfRange(0.2f, 1.0f);
 				break;
+			case EnemyState.Patrol:
+				_speed = MoveSpeed + _rng.RandfRange(-0.3f, 0.5f);
+				break;
 		}
+
+		AnimationController.SetMoveSpeed(_speed);
 	}
 
 	internal void TryReceiveAbility(AbilityHitData hitData)
@@ -154,9 +170,14 @@ public partial class Enemy : CharacterBody3D
 			HealthBar.SetHealthPercent(healthPercent);
 			if(_currentHealth <= 0)
 			{
-				EmitSignal(SignalName.OnDeath, this);
-				QueueFree();
+				AnimationController.Die();
 			}
 		}
+	}
+
+	private void OnDeathCompleteHandler()
+	{
+		EmitSignal(SignalName.OnDeath, this);
+		QueueFree();
 	}
 }

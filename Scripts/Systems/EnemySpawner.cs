@@ -52,7 +52,6 @@ public partial class EnemySpawner : Node
 			Vector3 spawnPos = GetRandomPointAround(CenterPoint.GlobalPosition, SpawnRadius);
 			enemy.GlobalPosition = Vector3.One * 1000; // Temporarily move enemy far away to avoid early collisions
 			enemy.Init(spawnPos);
-			enemy.MoveSpeed += _rng.RandfRange(-0.3f, 0.5f);
 		}
 
 		RemainingSpawns = SpawnCount;

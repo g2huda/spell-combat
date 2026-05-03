@@ -10,14 +10,14 @@ public partial class Player : CharacterBody3D
 
 	[Export] protected InputHandler InputHandler;
 	[Export] protected PlayerAnimationController AnimationController;
-	[Export] protected float MoveSpeed = 6f;
+	[Export] protected float MoveSpeed = 3f;
 	[Export] protected float RotationSpeed = 2.5f;
 	[Export] protected Marker3D AbilityPoint;
 
 	private float _moveInput;
 	private float _turnInput;
 
-    public  override void _Ready()
+	public  override void _Ready()
 	{
 		InputHandler.MoveInput += OnMoveInput;
 		InputHandler.TurnInput += OnTurnInput;
