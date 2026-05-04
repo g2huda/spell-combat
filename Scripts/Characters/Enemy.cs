@@ -24,9 +24,11 @@ public partial class Enemy : CharacterBody3D
 	[Export] protected float InvestigateTime = 2.0f;
 	[Export] protected float RotationSpeed = 6.0f;
 	[Export] protected HealthBarUI HealthBar;
+	[Export] protected VisibleOnScreenNotifier3D ScreenNotifier;
 
 	private EnemyState _state = EnemyState.Idle;
 
+	private Control _indicator;
 	private Vector3 _spawnPosition;
 	private Vector3 _targetPoint;
 	private float _speed;
@@ -37,8 +39,10 @@ public partial class Enemy : CharacterBody3D
 	private int _maxHealth = 100;
 	private int _currentHealth;
 
-	public void Init(Vector3 spawnPos)
+	public void Init(Vector3 spawnPos, Control indicator)
 	{
+		_indicator = indicator;
+		EnableIndicator(!GetViewport().GetCamera3D().IsPositionInFrustum(GlobalPosition));
 		_spawnPosition = spawnPos;
 		GlobalPosition = _spawnPosition;
 		_currentHealth = _maxHealth;
@@ -47,12 +51,24 @@ public partial class Enemy : CharacterBody3D
 		ChooseNextPatrolPoint();
 		ChangeState(EnemyState.Patrol);
 
+		ScreenNotifier.ScreenEntered += OnScreenEnteredHandler;
+		ScreenNotifier.ScreenExited += OnScreenExitedHandler;
 		AnimationController.OnDeathAnimationComplete += OnDeathCompleteHandler;
 	}
 
 	public override void _ExitTree()
 	{
+		ScreenNotifier.ScreenEntered -= OnScreenEnteredHandler;
+		ScreenNotifier.ScreenExited -= OnScreenExitedHandler;
+
 		AnimationController.OnDeathAnimationComplete -= OnDeathCompleteHandler;
+		
+		if(_indicator != null)
+		{
+			_indicator.QueueFree();
+			 _indicator = null;
+		}
+
 		base._ExitTree();
 	}
 	public override void _PhysicsProcess(double delta)
@@ -61,6 +77,26 @@ public partial class Enemy : CharacterBody3D
 		ProcessState((float)delta);
 		MoveAndSlide();
 	}
+
+	private void OnScreenEnteredHandler()
+	{
+		EnableIndicator(false);
+	}
+
+	private void OnScreenExitedHandler()
+	{
+		EnableIndicator(true);
+	}
+
+	private void EnableIndicator(bool enable)
+	{
+		if(_indicator == null)
+			return;
+
+		_indicator.ProcessMode = enable ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled;
+		_indicator.Visible = enable;
+	}
+
 	private void ProcessState(float dt)
 	{
 		switch(_state)

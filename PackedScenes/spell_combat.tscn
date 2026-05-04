@@ -9,7 +9,9 @@
 [ext_resource type="Script" uid="uid://hhyjnotisv4v" path="res://Scripts/Systems/EnemySpawner.cs" id="7_8cr2y"]
 [ext_resource type="PackedScene" uid="uid://bajq304xwc710" path="res://PackedScenes/Characters/Enemy/enemy.tscn" id="8_w1w8i"]
 [ext_resource type="Script" uid="uid://dtu0dppec2udp" path="res://Scripts/Systems/AbilityFeedbackSystem.cs" id="9_4yh0u"]
+[ext_resource type="PackedScene" uid="uid://cgm80ops8nel1" path="res://PackedScenes/UI/EnemyIndicator.tscn" id="9_k8e0d"]
 [ext_resource type="Script" uid="uid://cmqrwsmdrdphc" path="res://Scripts/Systems/GameController.cs" id="10_hb2he"]
+[ext_resource type="PackedScene" uid="uid://bqlkw74ddcxdu" path="res://PackedScenes/UI/indicators_layer.tscn" id="10_mac1p"]
 [ext_resource type="PackedScene" uid="uid://cvuv8d5n7gt7f" path="res://PackedScenes/UI/WinPopup.tscn" id="11_s413g"]
 [ext_resource type="Script" uid="uid://bf85ycf17whte" path="res://Scripts/UI/GameUi.cs" id="12_0oo30"]
 
@@ -67,6 +69,8 @@ Abilities = Array[PackedScene]([ExtResource("4_wixji"), ExtResource("5_veh8j"), 
 [node name="EnemySpawner" type="Node" parent="Systems" unique_id=1759470068 node_paths=PackedStringArray("AbilitySystem", "CenterPoint", "Player")]
 script = ExtResource("7_8cr2y")
 EnemyScene = ExtResource("8_w1w8i")
+EnemyIndicatorScene = ExtResource("9_k8e0d")
+IndicatorsContainerScene = ExtResource("10_mac1p")
 AbilitySystem = NodePath("../AbilitySystem")
 SpawnRadius = 15.0
 CenterPoint = NodePath("../../EnemyOffset")
@@ -139,6 +143,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("12_0oo30")
 SpellEquippedLabel = NodePath("SpellEquiped/Panel/SpellEquippedLabel")
 EnemiesRemainingLabel = NodePath("Enemies Remaining/Panel/EnemiesRemainingLabel")

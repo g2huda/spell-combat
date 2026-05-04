@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cgm80ops8nel1"]
+
+[ext_resource type="Script" uid="uid://dvvgm8fjcgumr" path="res://Scripts/UI/EnemyIndicator.cs" id="1_8ad6h"]
+[ext_resource type="Texture2D" uid="uid://bb1t2gslxqji" path="res://PackedScenes/UI/enemyIndicator.png" id="1_cnqh3"]
+
+[node name="EnemyIndicator" type="Control" unique_id=287089224]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_8ad6h")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=2094676296]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("1_cnqh3")
+expand_mode = 1

@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://b7hphunsbpp1o"]
+
+[ext_resource type="Script" uid="uid://bois3ggooi15o" path="res://Scripts/UI/GameCanvasLayer.cs" id="1_h7hjl"]
+
+[node name="GameCanvasLayer" type="CanvasLayer" unique_id=1747545161 node_paths=PackedStringArray("HUD")]
+script = ExtResource("1_h7hjl")
+HUD = NodePath("HUD")
+
+[node name="HUD" type="Control" parent="." unique_id=569578345]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

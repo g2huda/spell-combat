@@ -18,8 +18,7 @@ public partial class GameController : Node
 	}
 	public override void _ExitTree()
 	{
-		if(_winPopupInstance != null)
-			_winPopupInstance.OnMainMenuButtonPressed -= OnMainMenuButtonPressedHandler;
+		_winPopupInstance.OnMainMenuButtonPressed -= OnMainMenuButtonPressedHandler;
 		EnemySpawner.OnEnemiesCountChanged -= OnEnemiesCountChangedHandler;
 		AbilitySystem.OnAbilitySwitched -= OnAbilitySwitchedHandler;
 
