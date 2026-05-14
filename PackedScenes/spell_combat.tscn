@@ -14,7 +14,8 @@
 [ext_resource type="PackedScene" uid="uid://bqlkw74ddcxdu" path="res://PackedScenes/UI/indicators_layer.tscn" id="10_mac1p"]
 [ext_resource type="PackedScene" uid="uid://cvuv8d5n7gt7f" path="res://PackedScenes/UI/WinPopup.tscn" id="11_s413g"]
 [ext_resource type="Script" uid="uid://bf85ycf17whte" path="res://Scripts/UI/GameUi.cs" id="12_0oo30"]
-[ext_resource type="Texture2D" uid="uid://4hxefu3fxak3" path="res://Textures/YellowBricks.jpg" id="14_wixji"]
+[ext_resource type="Texture2D" uid="uid://feooqk0863bs" path="res://Textures/Tiles.png" id="14_veh8j"]
+[ext_resource type="Texture2D" uid="uid://70wluc3cxd4i" path="res://Textures/TilesNorm2.png" id="15_gxqah"]
 
 [sub_resource type="Environment" id="Environment_0f027"]
 
@@ -26,9 +27,15 @@
 sky = SubResource("Sky_0f027")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qwutr"]
-albedo_texture = ExtResource("14_wixji")
+albedo_texture = ExtResource("14_veh8j")
 albedo_texture_force_srgb = true
+normal_enabled = true
+normal_scale = 2.0
+normal_texture = ExtResource("15_gxqah")
+bent_normal_texture = ExtResource("15_gxqah")
 uv1_scale = Vector3(10, 10, 10)
+uv1_offset = Vector3(0.02, 0, 0)
+texture_filter = 0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_671wp"]
 material = SubResource("StandardMaterial3D_qwutr")
@@ -98,6 +105,7 @@ AbilitySystem = NodePath("../AbilitySystem")
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Arena" unique_id=306805590]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2266839, 0.0021205426, -0.15637095)
 mesh = SubResource("PlaneMesh_671wp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Arena" unique_id=49030248]
