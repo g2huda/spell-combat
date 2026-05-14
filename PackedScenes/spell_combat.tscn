@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bqlkw74ddcxdu" path="res://PackedScenes/UI/indicators_layer.tscn" id="10_mac1p"]
 [ext_resource type="PackedScene" uid="uid://cvuv8d5n7gt7f" path="res://PackedScenes/UI/WinPopup.tscn" id="11_s413g"]
 [ext_resource type="Script" uid="uid://bf85ycf17whte" path="res://Scripts/UI/GameUi.cs" id="12_0oo30"]
+[ext_resource type="Texture2D" uid="uid://4hxefu3fxak3" path="res://Textures/YellowBricks.jpg" id="14_wixji"]
 
 [sub_resource type="Environment" id="Environment_0f027"]
 
@@ -25,7 +26,9 @@
 sky = SubResource("Sky_0f027")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qwutr"]
-albedo_color = Color(0.45882353, 0.45882353, 1, 1)
+albedo_texture = ExtResource("14_wixji")
+albedo_texture_force_srgb = true
+uv1_scale = Vector3(10, 10, 10)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_671wp"]
 material = SubResource("StandardMaterial3D_qwutr")

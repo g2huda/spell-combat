@@ -11,7 +11,8 @@ public partial class Enemy : CharacterBody3D
 		Chase,
 		Reposition,
 		Attack,
-		Recover
+		Recover,
+		Dead
 	}
 
 	[Signal] public delegate void OnAbilityReceivedEventHandler(AbilityHitData hitData);
@@ -119,6 +120,9 @@ public partial class Enemy : CharacterBody3D
 					_stateTimer = WaitAtPointTime + _rng.RandfRange(0.0f, 1.0f);
 				}
 				break;
+			default:
+				Velocity = new Vector3(0, Velocity.Y, 0);
+				break;
 		}
 	}
 
@@ -189,6 +193,10 @@ public partial class Enemy : CharacterBody3D
 			case EnemyState.Patrol:
 				_speed = MoveSpeed + _rng.RandfRange(-0.3f, 0.5f);
 				break;
+			case EnemyState.Dead:
+				_speed = 0.0f;
+				AnimationController.Die();
+				break;
 		}
 
 		AnimationController.SetMoveSpeed(_speed);
@@ -203,10 +211,11 @@ public partial class Enemy : CharacterBody3D
 			_currentHealth -= (int)hitData.Power;
 			_currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
 			float healthPercent = (float)_currentHealth / _maxHealth;
-			HealthBar.SetHealthPercent(healthPercent);
+			HealthBar?.SetHealthPercent(healthPercent);
 			if(_currentHealth <= 0)
 			{
-				AnimationController.Die();
+				HealthBar?.QueueFree();
+				ChangeState(EnemyState.Dead);
 			}
 		}
 	}
